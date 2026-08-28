@@ -1,0 +1,42 @@
+rules_version = '2';
+
+// Firebase Storage Rules — Lux Tech
+// انسخ الملف ده كامل والصقه في:
+// Firebase Console → مشروعك (kiro-98ae7) → Storage → Rules → استبدل كل المحتوى → Publish
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // أي حد أدمن (نفس منطق admins/{uid} المستخدم في Firestore)
+    function isAdmin() {
+      return request.auth != null
+        && firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid));
+    }
+
+    function isImage() {
+      return request.resource.contentType.matches('image/.*');
+    }
+
+    function underSizeLimit() {
+      return request.resource.size < 5 * 1024 * 1024; // 5MB زي حد admin.js بالظبط
+    }
+
+    // صور المنتجات
+    match /products/{fileName} {
+      allow read: if true; // لازم تكون عامة عشان تظهر في المتجر للعملاء
+      allow write: if isAdmin() && isImage() && underSizeLimit();
+    }
+
+    // صور الأقسام/الكاتيجوريز
+    match /categories/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin() && isImage() && underSizeLimit();
+    }
+
+    // أي مسار تاني (احتياطي) — يفضل مقفول تمامًا غير الأدمن
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin() && isImage() && underSizeLimit();
+    }
+  }
+}
