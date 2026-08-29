@@ -55,7 +55,7 @@
     <div id="toast"></div>
 
     <section class="page active" id="page-dashboard">
-      <div class="welcome"><div><span class="eyebrow">LUX TECH / STORE CONTROL</span><h2>كل أرقام متجرك في مكان واحد.</h2><p>المخزون والمبيعات والطلبات تتحدث مباشرة من Firestore.</p></div><div class="today" id="today"></div></div>
+      <div class="welcome"><div><span class="eyebrow">LUX TECH / STORE CONTROL</span><h2>كل أرقام متجرك في مكان واحد.</h2></div><div class="today" id="today"></div></div>
       <div class="stats-grid">
         <article class="stat-card gold"><span class="stat-icon">ج</span><div><small>إجمالي المبيعات</small><strong id="statSales">—</strong><em>الطلبات المكتملة</em></div></article>
         <article class="stat-card"><span class="stat-icon">▣</span><div><small>قيمة المخزون</small><strong id="statStockValue">—</strong><em>السعر × المتاح</em></div></article>
@@ -69,9 +69,9 @@
       <div class="dashboard-grid lower"><article class="panel"><div class="panel-head"><div><span>LATEST ORDERS</span><h3>آخر الطلبات</h3></div><button class="link-btn" onclick="showPage('orders')">كل الطلبات ←</button></div><div class="table-wrap"><table><thead><tr><th>الطلب</th><th>العميل</th><th>الإجمالي</th><th>الحالة</th><th>التاريخ</th></tr></thead><tbody id="latestOrders"></tbody></table></div></article><article class="panel snapshot"><div class="panel-head"><div><span>INVENTORY SNAPSHOT</span><h3>أعلى الأصناف قيمة</h3></div></div><div id="topStockList"></div></article></div>
     </section>
 
-    <section class="page" id="page-products"><div class="page-head"><div><h2>المنتجات</h2><p>السعر والكمية التي تحددها أنت فقط.</p></div><button class="add-btn" onclick="openProductForm()">＋ إضافة منتج</button></div><div class="filters"><label>⌕ <input id="productSearch" placeholder="ابحث عن منتج..."></label><select id="productCategoryFilter"><option value="">كل الأقسام</option></select></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>المتاح</th><th>قيمة المخزون</th><th>المباع</th><th>مبيعات الصنف</th><th></th></tr></thead><tbody id="productsTableBody"></tbody></table></div></div></section>
+    <section class="page" id="page-products"><div class="page-head"><div><h2>المنتجات</h2></div><button class="add-btn" onclick="openProductForm()">＋ إضافة منتج</button></div><div class="filters"><label>⌕ <input id="productSearch" placeholder="ابحث عن منتج..."></label><select id="productCategoryFilter"><option value="">كل الأقسام</option></select></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>المنتج</th><th>القسم</th><th>السعر</th><th>المتاح</th><th>قيمة المخزون</th><th>المباع</th><th>مبيعات الصنف</th><th></th></tr></thead><tbody id="productsTableBody"></tbody></table></div></div></section>
 
-    <section class="page" id="page-inventory"><div class="page-head"><div><h2>المخزون والجرد</h2><p>مثال: 20 × 10,000 = 200,000 ج.م قيمة المخزون.</p></div><div class="inventory-total"><small>إجمالي قيمة المخزون</small><strong id="inventoryTotal">—</strong></div></div><div class="inventory-cards" id="inventoryCards"></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>الصنف</th><th>سعر القطعة</th><th>المتاح</th><th>الحسبة</th><th>القيمة الحالية</th><th>الحالة</th><th></th></tr></thead><tbody id="inventoryTableBody"></tbody></table></div></div></section>
+    <section class="page" id="page-inventory"><div class="page-head"><div><h2>المخزون والجرد</h2></div><div class="inventory-total"><small>إجمالي قيمة المخزون</small><strong id="inventoryTotal">—</strong></div></div><div class="inventory-cards" id="inventoryCards"></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>الصنف</th><th>سعر القطعة</th><th>المتاح</th><th>الحسبة</th><th>القيمة الحالية</th><th>الحالة</th><th></th></tr></thead><tbody id="inventoryTableBody"></tbody></table></div></div></section>
 
     <section class="page" id="page-orders"><div class="page-head"><div><h2>الطلبات</h2><p>عند تسليم الطلب يتم خصم الكمية من المخزون تلقائيًا.</p></div><select id="orderStatusFilter"><option value="">كل الحالات</option><option value="جديد">جديد</option><option value="قيد التجهيز">قيد التجهيز</option><option value="تم الشحن">تم الشحن</option><option value="تم التسليم">تم التسليم</option><option value="ملغي">ملغي</option></select></div><div class="panel"><div class="table-wrap"><table><thead><tr><th>رقم الطلب</th><th>العميل</th><th>الأصناف</th><th>الإجمالي</th><th>الحالة</th><th>التاريخ</th><th></th></tr></thead><tbody id="ordersTableBody"></tbody></table></div></div></section>
 
@@ -129,7 +129,7 @@
 </section>
 
 <section class="page" id="page-links">
-  <div class="page-head"><div><h2>الروابط</h2><p>روابط التواصل التي تظهر في Footer الموقع للعميل.</p></div></div>
+  <div class="page-head"><div><h2>الروابط</h2></div></div>
   <div class="panel settings-panel"><div class="form-grid">
     <div class="form-group"><label>WhatsApp</label><input id="socialWhatsapp" placeholder="https://wa.me/20..."></div>
     <div class="form-group"><label>Facebook</label><input id="socialFacebook" placeholder="https://facebook.com/..."></div>
