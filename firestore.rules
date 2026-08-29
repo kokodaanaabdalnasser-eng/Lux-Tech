@@ -1,0 +1,98 @@
+rules_version = '2';
+
+// Firestore Database Rules — Lux Tech
+// انسخ الملف ده كامل والصقه في:
+// Firebase Console → مشروعك (kiro-98ae7) → Firestore Database → Rules → استبدل كل المحتوى → Publish
+// ده مختلف تمامًا عن Storage Rules (اللي بتحكم في رفع الصور بس)
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // المنتجات — قراءة عامة للعملاء، كتابة للأدمن بس
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // الأقسام
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // كوبونات الخصم
+    match /coupons/{couponId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // إعدادات المتجر (طرق الدفع، إلخ) — تظهر في الفوتر للجميع
+    match /storeSettings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // الفروع — تظهر في الفوتر للجميع
+    match /branches/{branchId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // روابط السوشيال ميديا — تظهر في الفوتر للجميع
+    match /socialLinks/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // الطلبات — العميل ينشئ طلب فقط أثناء الشراء، لا يقرأ أي طلبات
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // تتبع الطلب بالرقم — يُنشأ أثناء الشراء، وقراءته عامة (لا يحتوي بيانات العميل الشخصية)
+    match /order_tracking/{orderId} {
+      allow create: if true;
+      allow read: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    // تتبع الطلبات حسب رقم الهاتف (المستخدم في صفحة "تتبع طلبك")
+    match /order_tracking_by_phone/{phoneHash}/orders/{orderId} {
+      allow create: if true;
+      allow read: if true;
+      allow update, delete: if isAdmin();
+    }
+
+    // طلبات إثبات الدفع (فودافون كاش/إنستاباي وغيرها)
+    match /paymentRequests/{requestId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // حركة المخزون — داخلية للأدمن فقط
+    match /inventory_movements/{movementId} {
+      allow read, write: if isAdmin();
+    }
+
+    // الأدمن نفسه — يُدار يدويًا من Firebase Console فقط
+    match /admins/{uid} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    // رسائل تواصل معنا — العميل ينشئ فقط، لا يقرأ رسائل غيره
+    match /messages/{messageId} {
+      allow create: if request.resource.data.name is string
+        && request.resource.data.message is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.message.size() > 0;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

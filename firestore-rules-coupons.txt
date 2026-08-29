@@ -1,0 +1,28 @@
+// أضف الجزء التالي داخل match /databases/{database}/documents في Firestore Rules الحالية.
+// مهم: لا تحذف قواعدك الحالية.
+// إذا كان عندك بالفعل function isAdmin() استخدمها كما هي.
+
+match /coupons/{couponId} {
+  // العميل يحتاج قراءة الكوبونات لتطبيق الكود في Checkout.
+  allow read: if true;
+  // الكتابة للأدمن فقط.
+  allow create, update, delete: if isAdmin();
+}
+
+// لو isAdmin() غير موجودة في قواعدك الحالية، استخدم هذه الدالة أعلى مستوى match:
+// function isAdmin() {
+//   return request.auth != null
+//     && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+// }
+
+
+// رسائل العملاء — أضف داخل match /databases/{database}/documents
+match /messages/{messageId} {
+  // العميل يستطيع إنشاء رسالة فقط. لا يمكنه قراءة الرسائل.
+  allow create: if request.resource.data.name is string
+    && request.resource.data.message is string
+    && request.resource.data.name.size() > 0
+    && request.resource.data.message.size() > 0;
+  // الإدارة فقط تستطيع القراءة والتعديل والحذف.
+  allow read, update, delete: if isAdmin();
+}
